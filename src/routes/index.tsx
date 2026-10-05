@@ -205,7 +205,7 @@ function TrustBar() {
     <div className="bg-primary px-5 py-10">
       <div className="mx-auto grid max-w-6xl grid-cols-2 gap-8 md:grid-cols-4">
         {D.stats.map((s, i) => {
-          const Icon = [Users, BookOpen, Globe, Award][i];
+          const Icon = [Users, BookOpen, Globe, Award][i]!;
           return (
             <div key={s.label} className="reveal text-center">
               <Icon className="mx-auto mb-2 h-6 w-6 text-gold" />
@@ -227,7 +227,7 @@ function Why() {
       <Heading eyebrow="Why this course?" title="Your Phone Can Do More." sub="Most people already have the tools in their hands. This course teaches them how to use those tools." />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {D.whyCards.map((c, i) => {
-          const Icon = icons[i];
+          const Icon = icons[i]!;
           const on = active === i;
           return (
             <button key={c.title} onClick={() => setActive(on ? null : i)} onMouseEnter={() => setActive(i)} onMouseLeave={() => setActive(null)}
@@ -280,7 +280,7 @@ function Goals() {
       </div>
       <div key={sel} className="mx-auto mt-8 max-w-3xl animate-in fade-in slide-in-from-bottom-2 rounded-3xl border border-gold/40 bg-cream p-7 text-center duration-500 md:p-10">
         <Sparkles className="mx-auto mb-3 h-6 w-6 text-gold" />
-        <p className="text-xl leading-relaxed text-charcoal">{D.goals[sel].answer}</p>
+        <p className="text-xl leading-relaxed text-charcoal">{D.goals[sel]!.answer}</p>
       </div>
     </Section>
   );
@@ -306,7 +306,7 @@ function Journey() {
         </div>
       </div>
       <p key={sel} className="mx-auto mt-8 max-w-2xl animate-in fade-in text-center text-xl text-ivory duration-500">
-        <span className="font-display text-2xl font-semibold text-gold">{D.journey[sel].step}: </span>{D.journey[sel].text}
+        <span className="font-display text-2xl font-semibold text-gold">{D.journey[sel]!.step}: </span>{D.journey[sel]!.text}
       </p>
     </Section>
   );
@@ -358,7 +358,7 @@ function Platforms() {
       <Heading eyebrow="Platforms" title="The Platforms You'll Learn" />
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {D.platforms.map((p, i) => {
-          const Icon = icons[i];
+          const Icon = icons[i]!;
           const on = sel === i;
           return (
             <button key={p.name} onClick={() => setSel(on ? null : i)}
@@ -389,7 +389,7 @@ function Tools() {
       <Heading eyebrow="Tools" title="Three Powerful Tools" />
       <div className="grid gap-5 lg:grid-cols-3">
         {D.tools.map((t, i) => {
-          const Icon = icons[i];
+          const Icon = icons[i]!;
           const on = sel === i;
           return (
             <div key={t.name} onMouseEnter={() => setSel(i)} onMouseLeave={() => setSel(null)} onClick={() => setSel(on ? null : i)}
@@ -420,7 +420,7 @@ function Repurpose() {
   const ref = useRef<HTMLDivElement>(null);
   const [vis, setVis] = useState(false);
   useEffect(() => {
-    const io = new IntersectionObserver(([e]) => e.isIntersecting && setVis(true), { threshold: 0.3 });
+    const io = new IntersectionObserver(([e]) => e?.isIntersecting && setVis(true), { threshold: 0.3 });
     if (ref.current) io.observe(ref.current);
     return () => io.disconnect();
   }, []);
@@ -511,7 +511,7 @@ function WhatYouGet() {
       <Heading eyebrow="What you get" title="Everything You Need." />
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {D.getList.map((g, i) => {
-          const Icon = icons[i];
+          const Icon = icons[i]!;
           return (
             <div key={g} className="reveal rounded-3xl border border-border bg-card p-6 text-center shadow-soft transition hover:-translate-y-1">
               <Icon className="mx-auto h-8 w-8 text-gold" />
@@ -654,7 +654,7 @@ function Footer() {
 function EnrollModal({ onClose }: { onClose: () => void }) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [goal, setGoal] = useState(D.goals[0].label);
+  const [goal, setGoal] = useState(D.goals[0]!.label);
   useEffect(() => {
     const k = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     window.addEventListener("keydown", k);
