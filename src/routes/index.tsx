@@ -32,8 +32,17 @@ export const Route = createFileRoute("/")({
 function useReveal(dep?: unknown) {
   useEffect(() => {
     const els = document.querySelectorAll(".reveal:not(.is-visible)");
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && (e.target.classList.add("is-visible"), io.unobserve(e.target))),
+      (entries) => entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add("is-visible");
+        if (!reducedMotion) e.target.animate(
+          [{ opacity: 0.45, transform: "translateY(12px)" }, { opacity: 1, transform: "translateY(0)" }],
+          { duration: 450, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" },
+        );
+        io.unobserve(e.target);
+      }),
       { threshold: 0.15 },
     );
     els.forEach((el) => io.observe(el));
@@ -42,7 +51,7 @@ function useReveal(dep?: unknown) {
 }
 
 function Section({ id, className = "", children }: { id?: string; className?: string; children: ReactNode }) {
-  return <section id={id} className={`px-5 py-14 md:py-20 ${className}`}><div className="mx-auto max-w-6xl">{children}</div></section>;
+  return <section id={id} className={`px-5 py-12 md:px-8 md:py-16 ${className}`}><div className="mx-auto max-w-6xl">{children}</div></section>;
 }
 
 function Heading({ eyebrow, title, sub, light }: { eyebrow?: string; title: ReactNode; sub?: string; light?: boolean }) {
@@ -83,7 +92,28 @@ function Index() {
   const [enrollOpen, setEnrollOpen] = useState<null | "year" | "life">(null);
   const [videoOpen, setVideoOpen] = useState(false);
   const [goal, setGoal] = useState(0);
+  const [showMobileJoin, setShowMobileJoin] = useState(false);
   useReveal();
+  useEffect(() => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const hero = document.getElementById("home")?.getBoundingClientRect();
+      const pricing = document.getElementById("pricing")?.getBoundingClientRect();
+      const footer = document.querySelector("footer")?.getBoundingClientRect();
+      const pricingVisible = pricing && pricing.top < window.innerHeight - 96 && pricing.bottom > 80;
+      setShowMobileJoin(Boolean(hero && hero.bottom <= 80 && !pricingVisible && footer && footer.top >= window.innerHeight - 96));
+    };
+    const schedule = () => { if (!frame) frame = window.requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, []);
   const join = () => setEnrollOpen("life");
   const watch = () => setVideoOpen(true);
 
@@ -113,7 +143,7 @@ function Index() {
       </main>
       <Footer onJoin={() => setEnrollOpen("year")} />
 
-      <div className="mobile-enroll fixed inset-x-0 bottom-0 z-40 border-t border-border bg-ivory/95 px-4 pt-3 backdrop-blur md:hidden">
+      <div inert={!showMobileJoin} aria-hidden={!showMobileJoin} className={`mobile-enroll fixed inset-x-0 bottom-0 z-40 border-t border-border bg-ivory/95 px-4 pt-3 backdrop-blur md:hidden ${showMobileJoin ? "mobile-enroll-visible" : "mobile-enroll-hidden"}`}>
         <div className="mx-auto grid max-w-lg grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
           <div className="min-w-0"><p className="text-xs text-muted-foreground">8 live classes · From</p><p className="text-xl font-bold text-primary">₹2,499</p></div>
           <Button variant="course" size="course" onClick={join} className={`${btnPrimary} min-h-12 px-5 py-3`}>Join next batch <ArrowRight className="h-4 w-4" /></Button>
@@ -127,6 +157,17 @@ function Index() {
 
 function Header({ onJoin }: { onJoin: () => void }) {
   const [menu, setMenu] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) if (entry.isIntersecting) setActiveSection(`#${entry.target.id}`);
+    }, { rootMargin: "-80px 0px -55% 0px", threshold: 0 });
+    D.nav.forEach(({ href }) => { const target = document.querySelector(href); if (target) observer.observe(target); });
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => { if (desktop.matches) setMenu(false); };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => { observer.disconnect(); desktop.removeEventListener("change", closeOnDesktop); };
+  }, []);
   useEffect(() => {
     const close = (event: KeyboardEvent) => { if (event.key === "Escape") setMenu(false); };
     window.addEventListener("keydown", close);
@@ -141,18 +182,18 @@ function Header({ onJoin }: { onJoin: () => void }) {
   }, []);
   return (
     <header className={`sticky top-0 z-50 transition ${scrolled ? "bg-ivory/95 shadow-soft backdrop-blur" : "bg-ivory/70 backdrop-blur"}`}>
-      <div className="mx-auto grid h-16 max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 lg:flex lg:justify-between md:h-20">
-        <a href="#home" className="shrink-0"><img src={logo.url} alt="Talented Ritu Insan" className="h-9 w-auto md:h-11" /></a>
-        <nav className="hidden items-center gap-5 lg:flex">
-          {D.nav.map((n) => <a key={n.href} href={n.href} className="text-sm font-semibold text-charcoal/80 transition hover:text-primary">{n.label}</a>)}
+      <div className="mx-auto grid h-16 max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-5 md:h-20 md:px-8 xl:flex xl:justify-between">
+        <a href="#home" className="min-w-0 shrink-0" aria-label="Talented Ritu Insan home"><img src={logo.url} alt="Talented Ritu Insan" className="brand-logo object-contain object-left" /></a>
+        <nav aria-label="Main navigation" className="hidden min-w-0 items-center gap-4 xl:flex">
+          {D.nav.map((n) => <a key={n.href} href={n.href} aria-current={activeSection === n.href ? "location" : undefined} className={`nav-link inline-flex min-h-11 items-center text-sm font-semibold transition ${activeSection === n.href ? "text-primary" : "text-charcoal/80 hover:text-primary"}`}>{n.label}</a>)}
         </nav>
         <div className="flex items-center gap-2">
           <Button variant="course" size="course" onClick={onJoin} className="hidden rounded-full bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground transition hover:bg-wine sm:inline-flex">Join Next Batch</Button>
-          <Button variant="course" size="course" onClick={() => setMenu(!menu)} aria-label={menu ? "Close menu" : "Open menu"} aria-expanded={menu} aria-controls="mobile-navigation" className="grid h-11 w-11 place-items-center rounded-full bg-cream text-primary lg:hidden">{menu ? <X /> : <Menu />}</Button>
+          <Button variant="course" size="course" onClick={() => setMenu(!menu)} aria-label={menu ? "Close menu" : "Open menu"} aria-expanded={menu} aria-controls="mobile-navigation" className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-cream text-primary xl:hidden">{menu ? <X /> : <Menu />}</Button>
         </div>
       </div>
       {menu && (
-        <nav id="mobile-navigation" aria-label="Mobile navigation" className="max-h-[calc(100dvh-160px)] overflow-y-auto border-t border-border bg-ivory px-5 py-4 lg:hidden animate-in slide-in-from-top-2">
+        <nav id="mobile-navigation" aria-label="Mobile navigation" className="max-h-[calc(100dvh-160px)] overflow-y-auto border-t border-border bg-ivory px-5 py-4 xl:hidden animate-in slide-in-from-top-2">
           {D.nav.map((n) => <a key={n.href} href={n.href} onClick={() => setMenu(false)} className="block py-3 text-lg font-semibold text-primary">{n.label}</a>)}
           <Button variant="course" size="course" onClick={() => { setMenu(false); onJoin(); }} className={`${btnPrimary} mt-3 w-full`}>JOIN NEXT BATCH</Button>
         </nav>
@@ -165,14 +206,14 @@ function Hero({ onJoin, onWatch }: { onJoin: () => void; onWatch: () => void }) 
   return <section id="home" className="course-hero relative isolate overflow-hidden bg-charcoal">
     <img src={heroImg} alt="A creator recording content on her phone" className="absolute inset-0 -z-20 h-full w-full object-cover object-[65%_center]" fetchPriority="high" />
     <div className="hero-scrim absolute inset-0 -z-10" />
-    <div className="mx-auto max-w-6xl px-5 py-10 sm:py-16 lg:py-20">
-      <div className="max-w-xl">
+    <div className="hero-content mx-auto w-full max-w-6xl px-5 py-8 md:px-8 sm:py-12 lg:py-16">
+      <div className="max-w-2xl">
         <p className="mb-4 flex items-center gap-2 text-xs font-bold text-gold sm:text-sm"><Sparkles className="h-4 w-4" /> Talented Ritu Insan presents</p>
-        <h1 className="text-4xl font-bold leading-[1.08] text-ivory sm:text-6xl lg:text-7xl">Social Media<br />Mastery</h1>
+        <h1 className="hero-title text-4xl font-bold leading-[1.08] text-ivory sm:text-6xl lg:text-7xl">Social Media<br />Mastery</h1>
         <p className="mt-4 font-display text-2xl text-gold sm:text-3xl">Learn. Create. Grow.</p>
         <p className="mt-4 max-w-md text-base leading-relaxed text-ivory/90 sm:text-lg">Social media, AI, editing and design. A practical live course, all from your phone.</p>
         <div className="mt-5 flex flex-wrap gap-2">{["8 live classes", "1 month", "Beginner friendly"].map((badge) => <span key={badge} className="rounded-md border border-ivory/30 bg-charcoal/25 px-3 py-2 text-xs font-semibold text-ivory">{badge}</span>)}</div>
-        <div className="mt-7 grid gap-3 sm:flex">
+        <div className="hero-actions mt-7 grid gap-3 sm:flex sm:flex-wrap">
           <Button variant="course" size="course" onClick={onJoin} className={btnGold}>Join the next batch <ArrowRight className="h-5 w-5" /></Button>
           <Button variant="course" size="course" onClick={onWatch} className={btnOutlineLight}><PlayCircle className="h-5 w-5" /> Meet your mentor</Button>
         </div>
@@ -186,13 +227,13 @@ function TrustBar() {
   const icons = [Users, GraduationCap, MapPin, Award];
   return (
     <div className="bg-primary px-5 py-6">
-      <div className="mx-auto grid max-w-5xl grid-cols-2 gap-5 md:grid-cols-4">
+      <div className="mx-auto grid max-w-5xl grid-cols-2 gap-x-4 gap-y-5 lg:grid-cols-4">
         {D.stats.map((s, i) => {
           const I = (icons[i] ?? Sparkles);
           return (
-            <div key={s.label} className="flex items-center justify-center gap-3">
-              <I className="h-6 w-6 shrink-0 text-gold" />
-              <div><p className="font-display text-2xl font-bold text-ivory md:text-3xl">{s.value}</p><p className="text-xs font-semibold uppercase tracking-wider text-ivory/70">{s.label}</p></div>
+            <div key={s.label} className="flex min-w-0 flex-col items-center justify-center gap-2 text-center sm:flex-row sm:text-left">
+              <I className="h-5 w-5 shrink-0 text-gold" />
+              <div className="min-w-0"><p className="whitespace-nowrap font-display text-2xl font-bold text-ivory xl:text-3xl">{s.value}</p><p className="text-xs font-semibold uppercase tracking-wider text-ivory/70">{s.label}</p></div>
             </div>
           );
         })}
@@ -216,7 +257,6 @@ function WelcomeVideo({ onWatch }: { onWatch: () => void }) {
           <span className="absolute inset-0 grid place-items-center"><span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-wine shadow-lift transition group-hover:scale-110"><PlayCircle className="h-8 w-8" /></span></span>
           <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-charcoal/85 px-4 py-3 text-sm"><span>Welcome Video</span><ArrowRight className="h-4 w-4 shrink-0" /></span>
         </Button>
-        <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><PlayCircle className="h-4 w-4" />{"\n"}</p>
       </div>
     </div>
   </Section>;
@@ -313,16 +353,16 @@ function Journey() {
   return (
     <Section id="journey" className="bg-cream">
       <Heading eyebrow="The big course journey" title="From idea to digital presence" />
-      <div className="grid grid-cols-4 gap-2 md:grid-cols-8">
+      <div className="grid grid-cols-2 gap-3 min-[360px]:grid-cols-4 xl:grid-cols-8">
         {D.journey.map((j, i) => {
           const I = (icons[i] ?? Sparkles);
           const on = active === i;
           return (
             <Button variant="course" size="course" key={j.step} onClick={() => setActive(i)} aria-pressed={on}
-              className={`group flex min-w-0 flex-col items-center gap-2 rounded-2xl p-3 transition ${on ? "bg-primary text-ivory shadow-lift" : "bg-card text-primary hover:-translate-y-1"}`}>
+              className={`group flex min-w-0 flex-col items-center gap-2 rounded-2xl px-2 py-3 transition ${on ? "bg-primary text-ivory shadow-lift" : "bg-card text-primary hover:-translate-y-1"}`}>
               <span className={`grid h-12 w-12 place-items-center rounded-full transition group-hover:rotate-6 ${on ? "bg-gold text-wine" : "bg-cream"}`}><I className="h-6 w-6" /></span>
               <span className="text-[11px] font-bold opacity-70">0{i + 1}</span>
-              <span className="text-sm font-extrabold uppercase">{j.step}</span>
+              <span className="text-xs font-extrabold uppercase sm:text-sm">{j.step}</span>
             </Button>
           );
         })}
@@ -344,7 +384,7 @@ function Platforms() {
   return (
     <Section>
       <Heading eyebrow="Platforms" title="The social media world, all in one course" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid items-start gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {D.platforms.map((p) => {
           const on = open === p.name;
           return (
@@ -462,7 +502,7 @@ function Method() {
   return (
     <Section className="bg-primary">
       <Heading light eyebrow="Learn by doing" title={<>Sirf dekhna nahi.<br /><span className="text-gold">Karke seekhna hai.</span></>} />
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid gap-3 min-[390px]:grid-cols-2 lg:grid-cols-4">
         {D.method.map((m, i) => (
           <Button variant="course" size="course" key={m.title} aria-pressed={active === i} onClick={() => setActive(i)}
             className={`reveal block rounded-3xl p-5 text-left transition md:p-6 ${active === i ? "bg-gold text-wine shadow-lift md:-translate-y-2" : "bg-wine text-ivory"}`}>
@@ -498,9 +538,9 @@ function Format() {
     <Section>
       <div className="reveal rounded-[2rem] border-2 border-gold/40 bg-card p-6 md:p-10">
         <h2 className="text-center text-3xl font-semibold uppercase text-primary md:text-4xl">Course format</h2>
-        <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-6">
+        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-6">
           {D.format.map((f) => (
-            <div key={f.big} className="rounded-2xl bg-cream p-4 text-center">
+            <div key={f.big} className="min-w-0 rounded-2xl bg-cream p-3 text-center">
               <p className="font-display text-xl font-bold text-primary md:text-2xl">{f.big}</p>
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{f.small}</p>
             </div>
@@ -535,10 +575,10 @@ function Pricing({ onJoin }: { onJoin: (p: "year" | "life") => void }) {
   return (
     <Section id="pricing" className="bg-cream">
       <Heading eyebrow="Pricing" title="Choose your access" sub="Course value ₹4,999" />
-      <div className="mx-auto mb-8 flex w-fit rounded-full bg-card p-1.5 shadow-soft">
+      <div className="mx-auto mb-8 grid w-full max-w-sm grid-cols-2 rounded-full bg-card p-1.5 shadow-soft">
         {(["year", "life"] as const).map((k) => (
           <Button variant="course" size="course" key={k} onClick={() => setSel(k)} aria-pressed={sel === k}
-            className={`rounded-full px-5 py-3 text-sm font-extrabold uppercase tracking-wide transition ${sel === k ? "bg-primary text-ivory" : "text-primary"}`}>
+            className={`min-w-0 rounded-full px-3 py-3 text-sm font-extrabold uppercase tracking-wide transition ${sel === k ? "bg-primary text-ivory" : "text-primary"}`}>
             {k === "year" ? "1 Year Access" : "Lifetime Access"}
           </Button>
         ))}
@@ -566,9 +606,9 @@ function Brand() {
           <p className="eyebrow">Your mentor</p>
           <h2 className="mt-2 text-3xl font-semibold uppercase text-primary md:text-5xl">Learn with Talented Ritu Insan</h2>
           <p className="mt-4 text-lg text-charcoal/80">Learning should not be limited by age, education or location.</p>
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
             {D.stats.map((s) => (
-              <div key={s.label} className="rounded-2xl bg-cream p-3 text-center">
+              <div key={s.label} className="min-w-0 rounded-2xl bg-cream p-3 text-center">
                 <p className="font-display text-xl font-bold text-primary md:text-2xl">{s.value}</p>
                 <p className="text-xs font-semibold uppercase text-muted-foreground">{s.label}</p>
               </div>
