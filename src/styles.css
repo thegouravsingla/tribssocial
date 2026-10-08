@@ -133,7 +133,22 @@
 @utility no-scrollbar { scrollbar-width: none; &::-webkit-scrollbar { display: none; } }
 
 .hero-scrim { background: var(--hero-scrim); }
-.course-hero { min-height: 540px; }
+.course-hero { min-height: 600px; display: flex; align-items: center; }
+.brand-logo { width: 168px; height: 44px; max-width: 100%; }
+.hero-title { text-wrap: balance; }
+.hero-content > div { animation: hero-enter 650ms ease-out both; }
+.nav-link { position: relative; }
+.nav-link::after { content: ""; position: absolute; inset: auto 0 6px; height: 2px; background: var(--primary); transform: scaleX(0); transform-origin: left; transition: transform 180ms ease; }
+.nav-link[aria-current], .nav-link:hover { color: var(--primary); }
+.nav-link[aria-current]::after, .nav-link:hover::after { transform: scaleX(1); }
+@keyframes hero-enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@media (min-width: 768px) {
+  .brand-logo { width: 210px; height: 56px; }
+}
+@media (min-width: 1024px) {
+  .hero-title { font-size: 80px; }
+  .hero-actions button { font-size: 17px; min-height: 56px; }
+}
 .course-page section.course-hero { padding: 0; }
 .course-page { overflow-x: clip; }
 .course-page section { scroll-margin-top: 12px; }
@@ -146,7 +161,12 @@
 .course-page main h2, .course-page main h3 { text-transform: none; }
 .course-page main h2 { line-height: 1.18; }
 .course-page button { line-height: 1.35; }
-.mobile-enroll { padding-bottom: max(12px, env(safe-area-inset-bottom)); }
+.course-page main button { min-width: 0; overflow-wrap: anywhere; }
+.course-page main h2, .course-page main h3 { overflow-wrap: anywhere; }
+.course-page button:active:not(:disabled) { scale: 0.98; }
+.mobile-enroll { padding-bottom: max(12px, env(safe-area-inset-bottom)); transition: transform 220ms ease, visibility 220ms; }
+.mobile-enroll-visible { transform: translateY(0); visibility: visible; }
+.mobile-enroll-hidden { transform: translateY(110%); visibility: hidden; pointer-events: none; }
 .course-modal {
   left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: calc(100% - 32px); max-width: 460px;
