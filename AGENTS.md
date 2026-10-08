@@ -16,3 +16,4 @@
 - Animate section entry through IntersectionObserver and the browser animation API without hiding base content, preserving readable SSR output and reduced-motion preferences.
 - Derive sitemap URLs from explicit route inclusion decisions using the versioned sitemap helper, so new public pages track the router without exposing non-content routes.
 - Derive Course structured data from the shared landing curriculum in the home route head, so search information matches visible lessons.
+- Keep floating contact actions in a focused landing component, raised above mobile enrollment and absent during dialogs, so contact controls never compete with these actions.

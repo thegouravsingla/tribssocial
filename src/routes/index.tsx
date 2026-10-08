@@ -13,6 +13,7 @@ import logo from "@/assets/logo.png.asset.json";
 import * as D from "@/components/landing/data";
 import { Button } from "@/components/ui/button";
 import { CourseModal, DailyOffer } from "@/components/landing/experience";
+import { ContactActions } from "@/components/landing/contact-actions";
 
 export const Route = createFileRoute("/")({
   staticData: { sitemap: true },
@@ -171,6 +172,7 @@ function Index() {
           <Button variant="course" size="course" onClick={join} className={`${btnPrimary} min-h-12 px-5 py-3`}>Join next batch <ArrowRight className="h-4 w-4" /></Button>
         </div>
       </div>
+      {!enrollOpen && !videoOpen && <ContactActions raised={showMobileJoin} />}
       {enrollOpen && <EnrollModal plan={enrollOpen} onClose={() => setEnrollOpen(null)} />}
       {videoOpen && <VideoModal onClose={() => setVideoOpen(false)} />}
     </div>
