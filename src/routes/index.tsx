@@ -214,7 +214,7 @@ function WelcomeVideo({ onWatch }: { onWatch: () => void }) {
           <img src={mentorImg} alt="Talented Ritu Insan, your course mentor" className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105" loading="lazy" />
           <span className="absolute inset-0 bg-charcoal/25" />
           <span className="absolute inset-0 grid place-items-center"><span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-wine shadow-lift transition group-hover:scale-110"><PlayCircle className="h-8 w-8" /></span></span>
-          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-charcoal/85 px-4 py-3 text-sm"><span>Meet your mentor · Sample class</span><ArrowRight className="h-4 w-4 shrink-0" /></span>
+          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-charcoal/85 px-4 py-3 text-sm"><span>Welcome Video</span><ArrowRight className="h-4 w-4 shrink-0" /></span>
         </Button>
         <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><PlayCircle className="h-4 w-4" /> Fashion Designing Basics · Sample teaching session</p>
       </div>
