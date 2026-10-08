@@ -134,6 +134,7 @@
 
 .hero-scrim { background: var(--hero-scrim); }
 .course-hero { min-height: 540px; }
+.course-page section.course-hero { padding: 0; }
 .course-page { overflow-x: clip; }
 .course-page section { scroll-margin-top: 12px; }
 .course-page .tracking-wide,
