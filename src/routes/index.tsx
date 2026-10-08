@@ -6,7 +6,7 @@ import {
   Lightbulb, Smartphone, Send, TrendingUp, GraduationCap, Home, Briefcase, Store, Sprout, Video,
   PenLine, Camera, Brush, Megaphone, Rocket, Hash, ArrowDown, MapPin, Clock, Award, Search, ArrowRight, ChevronLeft, ChevronRight,
 } from "lucide-react";
-import heroImg from "@/assets/hero-creator.jpg";
+import homePortrait from "@/assets/ritu-home-portrait.png.asset.json";
 import learnersImg from "@/assets/learners.jpg";
 import mentorImg from "@/assets/mentor.jpg";
 import logo from "@/assets/logo.png.asset.json";
@@ -225,14 +225,17 @@ function Header({ onJoin }: { onJoin: () => void }) {
 }
 
 function Hero({ onJoin, onWatch }: { onJoin: () => void; onWatch: () => void }) {
-  return <section id="home" className="course-hero relative isolate overflow-hidden bg-charcoal">
-    <img src={heroImg} alt="A creator recording content on her phone" className="absolute inset-0 -z-20 h-full w-full object-cover object-[65%_center]" fetchPriority="high" />
-    <div className="hero-scrim absolute inset-0 -z-10" />
-    <div className="hero-content mx-auto w-full max-w-6xl px-5 py-8 md:px-8 sm:py-12 lg:py-16">
-      <div className="max-w-2xl">
+  return <section id="home" className="course-hero relative isolate overflow-hidden bg-wine">
+    <div className="hero-content mx-auto w-full max-w-6xl px-5 md:px-8">
+      <div className="hero-intro min-w-0">
         <p className="mb-4 flex items-center gap-2 text-xs font-bold text-gold sm:text-sm"><Sparkles className="h-4 w-4" /> Talented Ritu Insan presents</p>
         <h1 className="hero-title text-4xl font-bold leading-[1.08] text-ivory sm:text-6xl lg:text-7xl">Social Media<br />Mastery</h1>
         <p className="mt-4 font-display text-2xl text-gold sm:text-3xl">Learn. Create. Grow.</p>
+      </div>
+      <div className="hero-portrait">
+        <img src={homePortrait.url} alt="Talented Ritu Insan seated in a black suit" width={1033} height={1447} className="h-full w-full object-contain object-bottom" fetchPriority="high" />
+      </div>
+      <div className="hero-details min-w-0">
         <p className="mt-4 max-w-md text-base leading-relaxed text-ivory/90 sm:text-lg">Social media, AI, editing and design. A practical live course, all from your phone.</p>
         <div className="mt-5 flex flex-wrap gap-2">{["8 live classes", "1 month", "Beginner friendly"].map((badge) => <span key={badge} className="rounded-md border border-ivory/30 bg-charcoal/25 px-3 py-2 text-xs font-semibold text-ivory">{badge}</span>)}</div>
         <div className="hero-actions mt-7 grid gap-3 sm:flex sm:flex-wrap">
