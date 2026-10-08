@@ -40,7 +40,7 @@ export function DailyOffer({ onJoin }: { onJoin: () => void }) {
         <p className="mt-2 text-sm text-ivory/75">8 live classes · 1-year recording access</p></div>
       <div><div className="flex items-start gap-2" role="timer" aria-label="Time until daily reset">
         {parts.map((part, i) => <div key={i} className="w-20 text-center"><span className="block rounded-lg border border-ivory/20 bg-ivory/10 py-3 font-sans text-3xl font-bold tabular-nums text-ivory">{part}</span><span className="mt-2 block text-xs text-ivory/70">{["Hours", "Minutes", "Seconds"][i]}</span></div>)}
-      </div><p className="mt-3 text-xs text-ivory/65">Resets daily at midnight IST. Offer repeats daily.</p></div>
+      </div><p className="mt-3 text-xs text-ivory/65">{"\n"}</p></div>
       <div className="flex flex-col gap-3 lg:items-end">
         <Button onClick={onJoin} className="h-auto min-h-12 w-full bg-gold px-6 py-3 font-bold text-wine hover:bg-gold/90 lg:w-auto">Join Early Bird <ArrowRight /></Button>
         <a href={waLink("Hi! How many seats are available for the next Social Media Mastery batch?")} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-2 text-sm text-ivory underline underline-offset-4"><MessageCircle className="h-4 w-4" /> Check available seats</a>
