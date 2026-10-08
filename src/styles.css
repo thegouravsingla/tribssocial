@@ -171,6 +171,12 @@
 .mobile-enroll { padding-bottom: max(12px, env(safe-area-inset-bottom)); transition: transform 220ms ease, visibility 220ms; }
 .mobile-enroll-visible { transform: translateY(0); visibility: visible; }
 .mobile-enroll-hidden { transform: translateY(110%); visibility: hidden; pointer-events: none; }
+.contact-actions { right: max(16px, env(safe-area-inset-right)); bottom: max(16px, env(safe-area-inset-bottom)); transition: bottom 220ms ease; }
+.contact-tooltip { position: absolute; right: 0; bottom: calc(100% + 10px); width: max-content; max-width: 180px; border-radius: 6px; padding: 8px 10px; background: var(--charcoal); color: var(--ivory); font-size: 12px; font-weight: 600; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 150ms ease; }
+.contact-actions a:hover .contact-tooltip, .contact-actions a:focus-visible .contact-tooltip { opacity: 1; visibility: visible; }
+@media (max-width: 767px) {
+  .contact-actions-raised { bottom: calc(100px + env(safe-area-inset-bottom)); }
+}
 .course-modal {
   left: 50%; top: 50%; transform: translate(-50%, -50%);
   width: calc(100% - 32px); max-width: 460px;

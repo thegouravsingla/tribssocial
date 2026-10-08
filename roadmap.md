@@ -11,3 +11,9 @@
 - [x] Add a router-derived sitemap and robots reference.
 - [x] Add accurate Course markup and self-referencing page URLs.
 - [x] Verify search metadata and sitemap; report remaining review suggestions (keyword change declined; FAQPage omitted as an SEO-only addition).
+
+# Contact updates
+
+- [x] Rename the first navigation link Home and target the homepage top.
+- [x] Add bottom-right WhatsApp and call actions with a course enquiry message.
+- [x] Verify contact links and mobile enrollment spacing.
