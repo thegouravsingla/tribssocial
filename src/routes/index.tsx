@@ -102,7 +102,7 @@ function Index() {
       <Platforms />
       <Tools />
       <Repurpose />
-      <Curriculum highlight={(D.goals[goal] ?? D.goals[0]).classes} goalLabel={(D.goals[goal] ?? D.goals[0]).label} />
+      <Curriculum highlight={(D.goals[goal]?.classes ?? [])} goalLabel={(D.goals[goal]?.label ?? "Your goal")} />
       <Method />
       <Build />
       <Format />
@@ -127,6 +127,11 @@ function Index() {
 
 function Header({ onJoin }: { onJoin: () => void }) {
   const [menu, setMenu] = useState(false);
+  useEffect(() => {
+    const close = (event: KeyboardEvent) => { if (event.key === "Escape") setMenu(false); };
+    window.addEventListener("keydown", close);
+    return () => window.removeEventListener("keydown", close);
+  }, []);
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const f = () => setScrolled(window.scrollY > 10);
@@ -183,7 +188,7 @@ function TrustBar() {
     <div className="bg-primary px-5 py-6">
       <div className="mx-auto grid max-w-5xl grid-cols-2 gap-5 md:grid-cols-4">
         {D.stats.map((s, i) => {
-          const I = (icons[i] ?? icons[0]);
+          const I = (icons[i] ?? Sparkles);
           return (
             <div key={s.label} className="flex items-center justify-center gap-3">
               <I className="h-6 w-6 shrink-0 text-gold" />
@@ -233,7 +238,7 @@ function PhoneFlow() {
       <Heading title="Your phone is already a powerful tool." sub="You just need to know how to use it." />
       <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3">
         {D.flow.map((f, i) => {
-          const I = (icons[i] ?? icons[0]);
+          const I = (icons[i] ?? Sparkles);
           return (
             <div key={f} className="reveal flex items-center gap-2 md:gap-3" style={{ transitionDelay: `${i * 120}ms` }}>
               <div className="flex flex-col items-center gap-2 rounded-3xl bg-card px-4 py-4 shadow-soft md:px-6">
@@ -260,7 +265,7 @@ function WhoFor() {
         <div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {D.personas.map((p, i) => {
-              const I = (icons[i] ?? icons[0]);
+              const I = (icons[i] ?? Sparkles);
               return (
                 <div key={p} className="reveal flex flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 text-center transition hover:-translate-y-1 hover:border-gold hover:shadow-soft">
                   <I className="h-7 w-7 text-primary" />
@@ -278,7 +283,8 @@ function WhoFor() {
 }
 
 function Goals({ goal, setGoal }: { goal: number; setGoal: (n: number) => void }) {
-  const g = (D.goals[goal] ?? D.goals[0]);
+  const g = D.goals[goal];
+  if (!g) return null;
   return (
     <Section className="bg-primary">
       <Heading light eyebrow="Pick your goal" title="What do you want social media to do for you?" />
@@ -294,7 +300,7 @@ function Goals({ goal, setGoal }: { goal: number; setGoal: (n: number) => void }
         <p className="font-display text-xl text-primary md:text-2xl">{g.answer}</p>
         <p className="mt-4 text-sm font-semibold text-muted-foreground">Focus classes for you:</p>
         <div className="mt-2 flex flex-wrap justify-center gap-2">
-          {g.classes.map((n) => <a key={n} href="#curriculum" className="rounded-full bg-gold-soft px-3 py-1 text-sm font-bold text-wine">Class {n} · {D.classes.find((c) => c.n === n)?.title}</a>)}
+          {g.classes.map((n) => <a key={n} href="#curriculum" className="inline-flex min-h-11 items-center rounded-md bg-gold-soft px-3 py-2 text-sm font-bold text-wine">Class {n} · {D.classes.find((c) => c.n === n)?.title}</a>)}
         </div>
       </div>
     </Section>
@@ -309,7 +315,7 @@ function Journey() {
       <Heading eyebrow="The big course journey" title="From idea to digital presence" />
       <div className="grid grid-cols-4 gap-2 md:grid-cols-8">
         {D.journey.map((j, i) => {
-          const I = (icons[i] ?? icons[0]);
+          const I = (icons[i] ?? Sparkles);
           const on = active === i;
           return (
             <Button variant="course" size="course" key={j.step} onClick={() => setActive(i)} aria-pressed={on}
@@ -322,7 +328,7 @@ function Journey() {
         })}
       </div>
       <p key={active} className="mx-auto mt-6 max-w-xl rounded-2xl bg-ivory px-6 py-4 text-center text-lg font-semibold text-charcoal shadow-soft animate-in fade-in zoom-in-95 duration-300">
-        <span className="text-primary">{(D.journey[active] ?? D.journey[0]).step}:</span> {(D.journey[active] ?? D.journey[0]).text}
+        <span className="text-primary">{D.journey[active]?.step}:</span> {D.journey[active]?.text}
       </p>
       <div className="mt-4 flex items-center justify-center gap-4">
         <Button variant="outline" size="icon" aria-label="Previous journey step" disabled={active === 0} onClick={() => setActive(active - 1)} className="h-11 w-11"><ChevronLeft /></Button>
@@ -343,7 +349,7 @@ function Platforms() {
           const on = open === p.name;
           return (
             <Button variant="course" size="course" key={p.name} onClick={() => setOpen(on ? "" : p.name)} aria-expanded={on}
-              className={`reveal rounded-3xl border-2 bg-card p-5 text-left transition ${on ? "border-gold shadow-lift" : "border-border hover:border-gold/50"}`}>
+              className={`reveal block w-full rounded-3xl border-2 bg-card p-5 text-left transition ${on ? "border-gold shadow-lift" : "border-border hover:border-gold/50"}`}>
               <div className="flex items-center justify-between">
                 <span className="grid h-12 w-12 place-items-center rounded-2xl bg-cream">{platformIcon[p.name]}</span>
                 <ChevronDown className={`h-5 w-5 text-primary transition ${on ? "rotate-180" : ""}`} />
@@ -459,7 +465,7 @@ function Method() {
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {D.method.map((m, i) => (
           <Button variant="course" size="course" key={m.title} aria-pressed={active === i} onClick={() => setActive(i)}
-            className={`reveal rounded-3xl p-5 text-left transition md:p-6 ${active === i ? "bg-gold text-wine shadow-lift md:-translate-y-2" : "bg-wine text-ivory"}`}>
+            className={`reveal block rounded-3xl p-5 text-left transition md:p-6 ${active === i ? "bg-gold text-wine shadow-lift md:-translate-y-2" : "bg-wine text-ivory"}`}>
             <span className="font-display text-4xl font-bold opacity-60">0{i + 1}</span>
             <h3 className="mt-2 text-xl font-bold uppercase md:text-2xl">{m.title}</h3>
             <p className="mt-1 text-sm font-semibold opacity-85 md:text-base">{m.text}</p>
@@ -548,17 +554,6 @@ function Pricing({ onJoin }: { onJoin: (p: "year" | "life") => void }) {
       </div>
       <p className="mt-3 text-center text-lg font-bold text-wine">Just ₹500 more for lifetime access.</p>
     </Section>
-  );
-}
-
-function Stories() {
-  return (
-    <div className="px-5 py-8">
-      <div className="mx-auto flex max-w-3xl items-center justify-center gap-3 rounded-2xl border border-dashed border-gold/60 p-5 text-center">
-        <MessageCircle className="h-6 w-6 shrink-0 text-gold" />
-        <p className="font-semibold text-charcoal">Student stories coming soon.</p>
-      </div>
-    </div>
   );
 }
 
