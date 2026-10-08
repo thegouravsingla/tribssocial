@@ -8,6 +8,6 @@
 
 # SEO corrections
 
-- [ ] Add a router-derived sitemap and robots reference.
-- [ ] Add accurate Course markup and self-referencing page URLs.
-- [ ] Verify search metadata and sitemap; report remaining review suggestions.
+- [x] Add a router-derived sitemap and robots reference.
+- [x] Add accurate Course markup and self-referencing page URLs.
+- [x] Verify search metadata and sitemap; report remaining review suggestions (keyword change declined; FAQPage omitted as an SEO-only addition).

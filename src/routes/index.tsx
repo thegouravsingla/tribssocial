@@ -38,7 +38,7 @@ export const Route = createFileRoute("/")({
         description: "A beginner-friendly, mobile-first course covering social media, content creation, AI, video editing and design through 8 live online classes over 1 month.",
         provider: { "@type": "Organization", name: "Talented Ritu Insan" },
         inLanguage: ["en", "hi"],
-        numberOfCredits: 8,
+        educationalLevel: "Beginner",
         syllabusSections: D.classes.map((lesson) => ({
           "@type": "Syllabus",
           name: `Class ${lesson.n}: ${lesson.title}`,
