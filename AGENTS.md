@@ -8,3 +8,7 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- Keep course content in the landing data module and reusable enrollment/offer UI in focused landing components, so course edits and accessibility behavior remain separate.
+- Use Radix dialogs for course overlays to ensure focus trapping, Escape handling, and focus restoration across devices.
+- Calculate the daily offer reset from the current timestamp in the pure offer-time helper; never use browser storage or fabricated availability for urgency.
