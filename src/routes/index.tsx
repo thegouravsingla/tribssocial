@@ -174,7 +174,7 @@ function Hero({ onJoin, onWatch }: { onJoin: () => void; onWatch: () => void }) 
         <div className="mt-5 flex flex-wrap gap-2">{["8 live classes", "1 month", "Beginner friendly"].map((badge) => <span key={badge} className="rounded-md border border-ivory/30 bg-charcoal/25 px-3 py-2 text-xs font-semibold text-ivory">{badge}</span>)}</div>
         <div className="mt-7 grid gap-3 sm:flex">
           <Button variant="course" size="course" onClick={onJoin} className={btnGold}>Join the next batch <ArrowRight className="h-5 w-5" /></Button>
-          <Button variant="course" size="course" onClick={onWatch} className={btnOutlineLight}><PlayCircle className="h-5 w-5" /> Watch welcome</Button>
+          <Button variant="course" size="course" onClick={onWatch} className={btnOutlineLight}><PlayCircle className="h-5 w-5" /> Meet your mentor</Button>
         </div>
         <p className="mt-4 text-xs text-ivory/80 sm:text-sm">From ₹2,499 · New batch every first Saturday</p>
       </div>
@@ -206,26 +206,26 @@ function WelcomeVideo({ onWatch }: { onWatch: () => void }) {
     <div className="grid items-center gap-6 md:grid-cols-[1fr_1.25fr] md:gap-10">
       <div><p className="eyebrow mb-3">A hello before you begin</p>
         <h2 className="text-3xl font-semibold leading-tight text-primary md:text-4xl">Meet your next<br />creative chapter.</h2>
-        <p className="mt-4 text-base leading-relaxed text-muted-foreground">Hear directly from us about Social Media Mastery and the journey ahead.</p>
+        <p className="mt-4 text-base leading-relaxed text-muted-foreground">Get to know Talented Ritu Insan through a sample fashion-design class. Ask our team for the Social Media Mastery welcome video.</p>
         <div className="mt-5 flex items-center gap-2 text-sm font-semibold text-primary"><Smartphone className="h-5 w-5" /> Your phone. Your ideas. Your start.</div>
       </div>
       <div className="min-w-0">
-        <Button variant="course" size="course" onClick={onWatch} aria-label="Play welcome video" className="group relative block aspect-video w-full overflow-hidden rounded-lg bg-charcoal p-0 text-ivory">
+        <Button variant="course" size="course" onClick={onWatch} aria-label="Play mentor sample class" className="group relative block aspect-video w-full overflow-hidden rounded-lg bg-charcoal p-0 text-ivory">
           <img src={mentorImg} alt="Talented Ritu Insan, your course mentor" className="h-full w-full object-cover object-top transition duration-500 group-hover:scale-105" loading="lazy" />
           <span className="absolute inset-0 bg-charcoal/25" />
           <span className="absolute inset-0 grid place-items-center"><span className="grid h-16 w-16 place-items-center rounded-full bg-gold text-wine shadow-lift transition group-hover:scale-110"><PlayCircle className="h-8 w-8" /></span></span>
-          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-charcoal/85 px-4 py-3 text-sm"><span>Welcome to Social Media Mastery</span><ArrowRight className="h-4 w-4 shrink-0" /></span>
+          <span className="absolute inset-x-0 bottom-0 flex items-center justify-between bg-charcoal/85 px-4 py-3 text-sm"><span>Meet your mentor · Sample class</span><ArrowRight className="h-4 w-4 shrink-0" /></span>
         </Button>
-        <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><PlayCircle className="h-4 w-4" /> A personal introduction to the course</p>
+        <p className="mt-3 flex items-center gap-2 text-xs text-muted-foreground"><PlayCircle className="h-4 w-4" /> Fashion Designing Basics · Sample teaching session</p>
       </div>
     </div>
   </Section>;
 }
 
 function VideoModal({ onClose }: { onClose: () => void }) {
-  return <CourseModal wide title="Welcome to Social Media Mastery" description="A personal introduction to your course journey." onClose={onClose}>
+  return <CourseModal wide title="Meet Talented Ritu Insan" description="Fashion Designing Basics — a sample class, not the Social Media Mastery welcome video." onClose={onClose}>
     <div className="aspect-video overflow-hidden rounded-lg bg-charcoal">
-      <iframe className="h-full w-full" src={`https://www.youtube-nocookie.com/embed/${D.VIDEO_ID}?rel=0&autoplay=1`} title="Welcome to Social Media Mastery" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowFullScreen />
+      <iframe className="h-full w-full" src={`https://www.youtube-nocookie.com/embed/${D.VIDEO_ID}?rel=0&autoplay=1`} title="Fashion Designing Basics sample class" allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowFullScreen />
     </div>
     <a href={`https://www.youtube.com/watch?v=${D.VIDEO_ID}`} target="_blank" rel="noreferrer" className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-primary underline underline-offset-4">Open on YouTube <ArrowRight className="h-4 w-4" /></a>
   </CourseModal>;
@@ -590,7 +590,7 @@ function FinalCta({ onJoin, onWatch }: { onJoin: () => void; onWatch: () => void
         <p className="mt-3 text-ivory/80">Start small. Learn step by step. Create with confidence.</p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button variant="course" size="course" onClick={onJoin} className={btnGold}>JOIN THE NEXT BATCH</Button>
-          <Button variant="course" size="course" onClick={onWatch} className={btnOutlineLight}><PlayCircle className="h-5 w-5" /> WATCH WELCOME VIDEO</Button>
+          <Button variant="course" size="course" onClick={onWatch} className={btnOutlineLight}><PlayCircle className="h-5 w-5" /> MEET YOUR MENTOR</Button>
         </div>
       </div>
     </section>
@@ -645,10 +645,17 @@ function EnrollModal({ plan, onClose }: { plan: "year" | "life"; onClose: () => 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [p, setP] = useState(plan);
+  const [error, setError] = useState("");
   const sel = D.plans[p];
   const field = "mt-1.5 w-full rounded-lg border border-input bg-card px-4 py-3 text-base text-charcoal outline-none focus:ring-2 focus:ring-ring";
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
+    const digits = phone.replace(/\D/g, "");
+    if (name.trim().length < 2 || digits.length < 10 || digits.length > 15) {
+      setError("Enter your name and a valid WhatsApp number (10–15 digits).");
+      return;
+    }
+    setError("");
     const url = D.waLink(`Hi! I want to join the next batch of Social Media Mastery.\nPlan: ${sel.access} access (${sel.price})\nName: ${name.trim()}\nPhone: ${phone.trim()}`);
     window.location.assign(url);
   };
@@ -659,8 +666,9 @@ function EnrollModal({ plan, onClose }: { plan: "year" | "life"; onClose: () => 
       </div></fieldset>
       <div className="mt-5 space-y-4">
         <label className="block text-sm font-semibold text-primary" htmlFor="enroll-name">Your name<input id="enroll-name" name="name" autoComplete="name" required minLength={2} maxLength={80} value={name} onChange={(e) => setName(e.target.value)} className={field} /></label>
-        <label className="block text-sm font-semibold text-primary" htmlFor="enroll-phone">WhatsApp number<input id="enroll-phone" name="tel" autoComplete="tel" required type="tel" inputMode="tel" pattern="[+0-9 ()-]{10,20}" title="Enter a valid phone number, including country code if outside India" value={phone} onChange={(e) => setPhone(e.target.value)} className={field} placeholder="+91" /></label>
+        <label className="block text-sm font-semibold text-primary" htmlFor="enroll-phone">WhatsApp number<input id="enroll-phone" name="tel" autoComplete="tel" required type="tel" inputMode="tel" minLength={10} maxLength={22} title="Enter a valid phone number, including country code if outside India" value={phone} onChange={(e) => setPhone(e.target.value)} className={field} placeholder="+91" /></label>
       </div>
+      {error && <p role="alert" className="mt-3 text-sm text-destructive">{error}</p>}
       <Button variant="course" size="course" type="submit" className={`${btnPrimary} mt-6 w-full px-4`}><MessageCircle className="h-5 w-5" /> Continue on WhatsApp</Button>
       <p className="mt-3 text-center text-xs text-muted-foreground">Our team will confirm availability and payment details.</p>
     </form>
