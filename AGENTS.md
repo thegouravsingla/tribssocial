@@ -12,3 +12,5 @@
 - Keep course content in the landing data module and reusable enrollment/offer UI in focused landing components, so course edits and accessibility behavior remain separate.
 - Use Radix dialogs for course overlays to ensure focus trapping, Escape handling, and focus restoration across devices.
 - Calculate the daily offer reset from the current timestamp in the pure offer-time helper; never use browser storage or fabricated availability for urgency.
+- Derive sticky enrollment visibility from visible page sections, hiding it around hero, pricing, and footer actions so enrollment controls do not compete or overlap.
+- Animate section entry through IntersectionObserver and the browser animation API without hiding base content, preserving readable SSR output and reduced-motion preferences.
