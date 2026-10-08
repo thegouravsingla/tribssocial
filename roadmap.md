@@ -16,4 +16,4 @@
 
 - [x] Rename the first navigation link Home and target the homepage top.
 - [x] Add bottom-right WhatsApp and call actions with a course enquiry message.
-- [ ] Verify contact links and mobile enrollment spacing.
+- [x] Verify contact links and mobile enrollment spacing.
