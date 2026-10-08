@@ -5,11 +5,13 @@ export const waLink = (text = "Hi! I want to know more about the Social Media Ma
 export const VIDEO_ID = "Ce-aegrPPrM";
 
 export const nav = [
+  { label: "Welcome", href: "#welcome" },
   { label: "Course", href: "#who" },
   { label: "Journey", href: "#journey" },
   { label: "Curriculum", href: "#curriculum" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQs", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export const stats = [
