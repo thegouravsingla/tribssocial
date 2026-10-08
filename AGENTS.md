@@ -14,3 +14,5 @@
 - Calculate the daily offer reset from the current timestamp in the pure offer-time helper; never use browser storage or fabricated availability for urgency.
 - Derive sticky enrollment visibility from visible page sections, hiding it around hero, pricing, and footer actions so enrollment controls do not compete or overlap.
 - Animate section entry through IntersectionObserver and the browser animation API without hiding base content, preserving readable SSR output and reduced-motion preferences.
+- Derive sitemap URLs from explicit route inclusion decisions using the versioned sitemap helper, so new public pages track the router without exposing non-content routes.
+- Derive Course structured data from the shared landing curriculum in the home route head, so search information matches visible lessons.

@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { CourseModal, DailyOffer } from "@/components/landing/experience";
 
 export const Route = createFileRoute("/")({
+  staticData: { sitemap: true },
   head: () => ({
     meta: [
       { title: "Social Media Mastery | Talented Ritu Insan" },
@@ -23,7 +24,28 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:title", content: "Social Media Mastery — Learn. Create. Grow." },
       { property: "og:description", content: "A practical live course by Talented Ritu Insan: social media, content, AI, editing and design — all from your phone." },
+      { property: "og:url", content: "https://talentedrituinsan.life/" },
     ],
+    links: [{ rel: "canonical", href: "https://talentedrituinsan.life/" }],
+    scripts: [{
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "Course",
+        "@id": "https://talentedrituinsan.life/#course",
+        name: "Social Media Mastery",
+        url: "https://talentedrituinsan.life/",
+        description: "A beginner-friendly, mobile-first course covering social media, content creation, AI, video editing and design through 8 live online classes over 1 month.",
+        provider: { "@type": "Organization", name: "Talented Ritu Insan" },
+        inLanguage: ["en", "hi"],
+        numberOfCredits: 8,
+        syllabusSections: D.classes.map((lesson) => ({
+          "@type": "Syllabus",
+          name: `Class ${lesson.n}: ${lesson.title}`,
+          description: lesson.topics.join(", "),
+        })),
+      }),
+    }],
   }),
   component: Index,
 });
