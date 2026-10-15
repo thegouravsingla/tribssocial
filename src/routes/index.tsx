@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import {
   Sparkles, MessageCircle, Check, ChevronDown, Menu, X, Users, PlayCircle, Phone, Mail, Globe,
@@ -702,7 +702,10 @@ function Footer({ onJoin }: { onJoin: () => void }) {
       </div>
       <div className="mt-8 flex flex-col justify-between gap-3 border-t border-ivory/15 pt-6 text-xs sm:flex-row">
         <p>© {new Date().getFullYear()} Talented Ritu Insan</p>
-        <a href={D.waLink("Hi! Please share the Social Media Mastery privacy policy, terms and refund policy before I enroll.")} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-gold">Request privacy, terms & refund details</a>
+        <nav aria-label="Legal pages" className="flex flex-wrap gap-x-5">
+          <Link to="/terms" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-gold">Terms & Conditions</Link>
+          <Link to="/privacy" className="inline-flex min-h-11 items-center underline underline-offset-4 hover:text-gold">Privacy Policy</Link>
+        </nav>
       </div>
     </div>
   </footer>;
