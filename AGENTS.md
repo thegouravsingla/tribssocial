@@ -17,3 +17,4 @@
 - Derive sitemap URLs from explicit route inclusion decisions using the versioned sitemap helper, so new public pages track the router without exposing non-content routes.
 - Derive Course structured data from the shared landing curriculum in the home route head, so search information matches visible lessons.
 - Keep floating contact actions in a focused landing component, raised above mobile enrollment and absent during dialogs, so contact controls never compete with these actions.
+- Keep legal copy (Terms & Conditions, Privacy Policy) in the shared legal page component with one route file per page, and link every legal page from the home footer, so policy wording stays in one place.

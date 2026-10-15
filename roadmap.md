@@ -17,3 +17,9 @@
 - [x] Rename the first navigation link Home and target the homepage top.
 - [x] Add bottom-right WhatsApp and call actions with a course enquiry message.
 - [x] Verify contact links and mobile enrollment spacing.
+
+# Legal pages
+
+- [x] Add Terms & Conditions page with the no-refund / no-cancellation policy.
+- [x] Add Privacy Policy page and footer links on both pages.
+- [x] Include both pages in the sitemap and verify routing, links and mobile layout.
